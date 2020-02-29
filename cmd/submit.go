@@ -7,6 +7,8 @@ import (
 	"github.com/spf13/viper"
 )
 
+var job = viper.New();
+
 func init() {
 	cmd := &cobra.Command{
 		Use:   "submit",
@@ -18,11 +20,22 @@ func init() {
 	cmd.PersistentFlags().StringP("path", "p", ".", "path to job")
 
 	cmd.Flags().StringP("core", "c", "", "core type")
-	viper.BindPFlag("core", cmd.Flags().Lookup("core"))
+	job.BindPFlag("core", cmd.Flags().Lookup("core"))
 	cmd.Flags().IntP("numcores", "n", 0, "number of cores")
-	viper.BindPFlag("numcores", cmd.Flags().Lookup("numcores"))
+	job.BindPFlag("numcores", cmd.Flags().Lookup("numcores"))
 
 	rootCmd.AddCommand(cmd)
+}
+
+type Job struct {
+	Core string
+	NumCores int
+	Analysis []AnalysisStep
+}
+type AnalysisStep struct {
+	Software string
+	Version string
+	Command string
 }
 
 func submit(cmd *cobra.Command, args []string) {
@@ -30,23 +43,31 @@ func submit(cmd *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	viper.SetConfigName(name)
+	job.SetConfigName(name)
 
 	path, err := cmd.Flags().GetString("path")
 	if err != nil {
 		log.Fatal(err)
 	}
-	viper.AddConfigPath(path)
+	job.AddConfigPath(path)
 
-	viper.SetDefault("core", "onyx")
-	viper.SetDefault("numcores", 2)
+	job.SetDefault("core", "onyx")
+	job.SetDefault("numcores", 2)
 
-	err = viper.ReadInConfig()
+	err = job.ReadInConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fmt.Printf("core      %s\n", viper.GetString("core"))
-	fmt.Printf("num cores %d\n", viper.GetInt("numcores"))
+	var j Job
+	job.Unmarshal(&j)
 
+	fmt.Printf("core      %s\n", j.Core)
+	fmt.Printf("num cores %d\n", j.NumCores)
+
+	for i, a := range j.Analysis {
+		fmt.Printf("analysis step %d: software %s\n", i, a.Software)
+		fmt.Printf("analysis step %d: version  %s\n", i, a.Version)
+		fmt.Printf("analysis step %d: command  %s\n", i, a.Command)
+	}
 }
