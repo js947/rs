@@ -1,49 +1,52 @@
 package cmd
 
 import (
-	"io/ioutil"
 	"log"
-	"os"
-
+	"fmt"
 	"github.com/spf13/cobra"
-	"github.com/davecgh/go-spew/spew"
-	"gopkg.in/yaml.v3"
+	"github.com/spf13/viper"
 )
 
-type Job struct {
-	Core     string
-	NumCores int
-	Analysis []AnalysisStep
-}
-type AnalysisStep struct {
-	Software string
-	Version  string
-	Command  string
-}
-
 func init() {
-	rootCmd.AddCommand(&cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "submit",
 		Short: "Submit job",
 		Run: submit,
-	})
+	}
+
+	cmd.PersistentFlags().String("config", "rescale", "job config file")
+	cmd.PersistentFlags().StringP("path", "p", ".", "path to job")
+
+	cmd.Flags().StringP("core", "c", "", "core type")
+	viper.BindPFlag("core", cmd.Flags().Lookup("core"))
+	cmd.Flags().IntP("numcores", "n", 0, "number of cores")
+	viper.BindPFlag("numcores", cmd.Flags().Lookup("numcores"))
+
+	rootCmd.AddCommand(cmd)
 }
 
 func submit(cmd *cobra.Command, args []string) {
-	job_file, err := os.Open("rescale.yaml")
+	name, err := cmd.Flags().GetString("config")
+	if err != nil {
+		log.Fatal(err)
+	}
+	viper.SetConfigName(name)
+
+	path, err := cmd.Flags().GetString("path")
+	if err != nil {
+		log.Fatal(err)
+	}
+	viper.AddConfigPath(path)
+
+	viper.SetDefault("core", "onyx")
+	viper.SetDefault("numcores", 2)
+
+	err = viper.ReadInConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	job_raw, err := ioutil.ReadAll(job_file)
-	if err != nil {
-		log.Fatal(err)
-	}
+	fmt.Printf("core      %s\n", viper.GetString("core"))
+	fmt.Printf("num cores %d\n", viper.GetInt("numcores"))
 
-	var job Job
-	err = yaml.Unmarshal([]byte(job_raw), &job)
-	if err != nil {
-		log.Fatal(err)
-	}
-	spew.Dump(job)
 }

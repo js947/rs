@@ -1,5 +1,3 @@
-core: onyx
-numcores: 8
 analysis:
 - software: openfoam
   version: 7
