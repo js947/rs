@@ -44,3 +44,45 @@ transfer, to acoustics, solid mechanics and electromagnetics.</p>
 
 [... other custom versions of openfoam ...]
 ```
+
+## Analysis versions
+
+To query the available versions of an analysis, we can use the `versions` command with the analysis *code*. The *code* is the simple ID - i.e. openfoam rather than openFOAM, openfoam_plus rather than OpenFOAM+. 
+
+```
+$ rs versions openfoam
+       7 (Intel MPI)    7-intelmpi
+       6 (Intel MPI)    6-intelmpi
+                 5.0    5.0
+                 4.1    4.1
+               3.0.0    3.0.0-openmpi
+               2.4.0    2.4.0-openmpi
+               2.3.1    2.3.1-openmpi
+               2.3.0    2.3.0-openmpi
+               2.2.2    2.2.2-openmpi
+               2.2.0    2.2.0-openmpi
+               2.1.1    2.1.1-openmpi
+```
+
+This command returns the description along with the version code.
+
+## Core types
+
+To identify what kind of core (hardware) we can run on, we can use the `cores` command.
+
+To list all of the core times available
+
+```
+$ rs cores
+        code            name    description
+       hpc-3            Onyx    Intel Xeon E5-2666 v3 (Haswell)
+     mercury         Mercury    Intel Xeon E5-2667 v3 (Haswell)
+[... total 30+ different core types ...]
+```
+
+It is necessary to pick a core type that has support for the specific application that you are trying to run, and you can filter with the application and version code to see the core types that support that application version
+
+```
+$ rs cores openfoam 7-intelmpi
+[... lots of core types ...]
+```
