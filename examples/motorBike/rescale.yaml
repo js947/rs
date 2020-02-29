@@ -1,0 +1,9 @@
+core: onyx
+numcores: 8
+analysis:
+- software: openfoam
+  version: 7
+  command: ./Allrun
+- software: paraview
+  version: latest
+  command: pvplot plot.py
