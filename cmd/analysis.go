@@ -11,7 +11,7 @@ import (
 func init() {
 	cmd := &cobra.Command{
 		Use:   "analyses",
-		Short: "List analisys types",
+		Short: "List analysis types",
 		Run:   analyses,
 	}
 	rootCmd.AddCommand(cmd)
