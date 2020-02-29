@@ -26,6 +26,7 @@ type Core struct {
 	Code      string
 	Name      string
 	Processor string `json:"processorInfo"`
+	Price     float32
 }
 func get_coretypes() []Core {
 	var cores []Core
@@ -46,10 +47,10 @@ func get_coretypes() []Core {
 }
 
 func allcores() {
-	f := "%12s\t%12s\t%s\n"
-	fmt.Printf(f, "code", "name", "description")
+	f := "%12s\t%12s\t%12s\t%s\n"
+	fmt.Printf(f, "code", "name", "price", "description")
 	for _, v := range get_coretypes() {
-		fmt.Printf(f, v.Code, v.Name, v.Processor)
+		fmt.Printf(f, v.Code, v.Name, fmt.Sprintf("%f", v.Price), v.Processor)
 	}
 }
 
