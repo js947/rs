@@ -21,19 +21,15 @@ type AnalysisStep struct {
 	Command  string
 }
 
-var submitCmd = &cobra.Command{
-	Use:   "submit",
-	Short: "submit job",
-	Run: func(cmd *cobra.Command, args []string) {
-		doSubmit()
-	},
-}
-
 func init() {
-	rootCmd.AddCommand(submitCmd)
+	rootCmd.AddCommand(&cobra.Command{
+		Use:   "submit",
+		Short: "Submit job",
+		Run: submit,
+	})
 }
 
-func doSubmit() {
+func submit(cmd *cobra.Command, args []string) {
 	job_file, err := os.Open("rescale.yaml")
 	if err != nil {
 		log.Fatal(err)

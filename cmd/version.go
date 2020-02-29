@@ -6,13 +6,11 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(versionCmd)
-}
-
-var versionCmd = &cobra.Command{
+	rootCmd.AddCommand(&cobra.Command{
 	Use:   "version",
-	Short: "print version",
+	Short: "Print version",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("rs version 0.0.1")
-	},
+			fmt.Println("rs version 0.0.1")
+		},
+	})
 }
