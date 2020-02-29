@@ -88,12 +88,12 @@ func analyses(cmd *cobra.Command, args []string) {
 					description = b.Description
 				}
 			}
-			fmt.Printf("%3d %20s\n", i, a.ID) 
+			fmt.Printf("%3d %s\n", i, a.ID) 
 			fmt.Printf("%s\n%s\n\n", name, wordwrap.WrapString(description, 80)) 
 		}
 	} else {
 		for i, a := range analyses {
-			fmt.Printf("%3d %20s\n", i, a.Code) 
+			fmt.Printf("%3d %s\n", i, a.Code) 
 			fmt.Printf("%s\n%s\n\n", a.Name, wordwrap.WrapString(a.Description, 80)) 
 		}
 	}
