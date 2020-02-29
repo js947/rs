@@ -25,7 +25,9 @@ func init() {
 type Analysis struct {
 	Code        string
 	Name        string
+	Industries  string
 	Description string
+	Vendor      string `json:"vendorName"`
 }
 
 func analyses(cmd *cobra.Command, args []string) {
