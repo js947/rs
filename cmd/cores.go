@@ -1,24 +1,24 @@
 package cmd
 
 import (
-	"fmt"
 	"encoding/json"
-	"github.com/spf13/cobra"
+	"fmt"
 	"github.com/js947/rs/api"
+	"github.com/spf13/cobra"
 )
 
 func init() {
 	cmd := &cobra.Command{
 		Use:   "cores",
 		Short: "List core types",
-		Run: cores,
+		Run:   cores,
 	}
 	rootCmd.AddCommand(cmd)
 }
 
 type Core struct {
-	Code string
-	Name string
+	Code      string
+	Name      string
 	Processor string `json:"processorInfo"`
 }
 
@@ -28,8 +28,8 @@ func cores(cmd *cobra.Command, args []string) {
 
 	for addr != "" {
 		var capi struct {
-			Count int
-			Next string
+			Count   int
+			Next    string
 			Results []Core
 		}
 		json.Unmarshal(api.Get(addr), &capi)

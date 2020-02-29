@@ -1,25 +1,25 @@
 package cmd
 
 import (
-	"os"
-	"fmt"
 	"encoding/json"
-	"github.com/spf13/cobra"
+	"fmt"
 	"github.com/js947/rs/api"
+	"github.com/spf13/cobra"
+	"os"
 )
 
 func init() {
 	cmd := &cobra.Command{
 		Use:   "analyses",
 		Short: "List analisys types",
-		Run: analyses,
+		Run:   analyses,
 	}
 	rootCmd.AddCommand(cmd)
 }
 
 type Analysis struct {
-	Code string
-	Name string
+	Code        string
+	Name        string
 	Description string
 }
 
@@ -29,8 +29,8 @@ func analyses(cmd *cobra.Command, args []string) {
 
 	for addr != "" {
 		var capi struct {
-			Count int
-			Next string
+			Count   int
+			Next    string
 			Results []Analysis
 		}
 		json.Unmarshal(api.Get(addr), &capi)

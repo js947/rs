@@ -1,19 +1,19 @@
 package cmd
 
 import (
-	"log"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"log"
 )
 
-var job = viper.New();
+var job = viper.New()
 
 func init() {
 	cmd := &cobra.Command{
 		Use:   "submit",
 		Short: "Submit job",
-		Run: submit,
+		Run:   submit,
 	}
 
 	cmd.PersistentFlags().String("config", "rescale", "job config file")
@@ -28,14 +28,14 @@ func init() {
 }
 
 type Job struct {
-	Core string
+	Core     string
 	NumCores int
 	Analysis []AnalysisStep
 }
 type AnalysisStep struct {
 	Software string
-	Version string
-	Command string
+	Version  string
+	Command  string
 }
 
 func submit(cmd *cobra.Command, args []string) {

@@ -1,11 +1,11 @@
 package cmd
 
 import (
-	"os"
 	"fmt"
-	"log"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"log"
+	"os"
 )
 
 var rootCmd = &cobra.Command{
@@ -16,9 +16,9 @@ See http://github.com/js947/rs`,
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("hi")
 	},
-  }
-  
-  func Execute() {
+}
+
+func Execute() {
 	rootCmd.PersistentFlags().StringP("token", "t", "", "Rescale API token")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 
@@ -35,7 +35,7 @@ See http://github.com/js947/rs`,
 	}
 
 	if err := rootCmd.Execute(); err != nil {
-	  fmt.Println(err)
-	  os.Exit(1)
+		fmt.Println(err)
+		os.Exit(1)
 	}
-  }
+}
