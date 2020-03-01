@@ -6,6 +6,7 @@ import (
 	"github.com/js947/rs/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"time"
 )
 
 func init() {
@@ -36,6 +37,7 @@ func jobs(cmd *cobra.Command) error {
 		ClusterStatus struct {
 			State string `json:"content"`
 		} `json:"clusterStatusDisplay"`
+		Date time.Time `json:"dateInserted"`
 	}
 	var jobs []Job
 
@@ -69,11 +71,15 @@ func jobs(cmd *cobra.Command) error {
 			fmt.Printf(f, j.ID, j.Owner, j.JobStatus.State + "/" + j.ClusterStatus.State, j.Name)
 		}
 	} else {
-		f := "%6s\t%24s\t%s\n"
-		fmt.Printf(f, "id", "status", "name")
+		f := "%6s\t%24s\t%16s\t%s\n"
+		fmt.Printf(f, "id", "date", "status", "name")
 		for _, j := range jobs {
 			if j.Owner == viper.GetString("username") {
-				fmt.Printf(f, j.ID, j.JobStatus.State + "/" + j.ClusterStatus.State, j.Name)
+				fmt.Printf(f, 
+					j.ID, 
+					j.Date.Format("Mon Jan _2 15:04 2006"), 
+					j.JobStatus.State + "/" + j.ClusterStatus.State, 
+					j.Name)
 			}
 		}
 	}
