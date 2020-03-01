@@ -1,0 +1,4 @@
+analysis:
+- software: user_included
+  version: 0
+  command: cat hello
