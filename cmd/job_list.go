@@ -3,34 +3,50 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
+	"time"
+
 	"github.com/js947/rs/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"time"
 )
 
 func init() {
-	cmd := &cobra.Command{
+	jobs := &cobra.Command{
 		Use:   "jobs",
-		Short: "List jobs",
+		Short: "List jobs (shorthand for 'job list')",
 		Run: func(cmd *cobra.Command, args []string) {
-			err := jobs(cmd)
-            if err != nil {
-                panic(err)
-            }
+			err := job_list(cmd)
+			if err != nil {
+				panic(err)
+			}
 		},
 	}
+	rootCmd.AddCommand(jobs)
 
-	cmd.Flags().BoolP("all", "a", false, "All jobs (not just owned by me)")
+	list := &cobra.Command{
+		Use:   "list",
+		Short: "List jobs",
+		Run: func(cmd *cobra.Command, args []string) {
+			err := job_list(cmd)
+			if err != nil {
+				panic(err)
+			}
+		},
+	}
+	jobCmd.AddCommand(list)
 
-	rootCmd.AddCommand(cmd)
+	joblist_flags := func(cmd *cobra.Command) {
+		cmd.Flags().BoolP("all", "a", false, "All jobs (not just owned by me)")
+	}
+	joblist_flags(jobs)
+	joblist_flags(list)
 }
 
-func jobs(cmd *cobra.Command) error {
+func job_list(cmd *cobra.Command) error {
 	type Job struct {
-		Name string `json:"name"`
-		ID string `json:"id"`
-		Owner string `json:"owner"`
+		Name      string `json:"name"`
+		ID        string `json:"id"`
+		Owner     string `json:"owner"`
 		JobStatus struct {
 			State string `json:"content"`
 		} `json:"jobStatus"`
@@ -44,8 +60,8 @@ func jobs(cmd *cobra.Command) error {
 	addr := "https://platform.rescale.com/api/v2/jobs/?page_size=20"
 	for addr != "" {
 		var capi struct {
-			Count int
-			Next string
+			Count   int
+			Next    string
 			Results []Job
 		}
 		data, err := api.Get(addr)
@@ -68,17 +84,17 @@ func jobs(cmd *cobra.Command) error {
 		f := "%6s\t%24s\t%24s\t%s\n"
 		fmt.Printf(f, "id", "owner", "status", "name")
 		for _, j := range jobs {
-			fmt.Printf(f, j.ID, j.Owner, j.JobStatus.State + "/" + j.ClusterStatus.State, j.Name)
+			fmt.Printf(f, j.ID, j.Owner, j.JobStatus.State+"/"+j.ClusterStatus.State, j.Name)
 		}
 	} else {
 		f := "%6s\t%24s\t%16s\t%s\n"
 		fmt.Printf(f, "id", "date", "status", "name")
 		for _, j := range jobs {
 			if j.Owner == viper.GetString("username") {
-				fmt.Printf(f, 
-					j.ID, 
-					j.Date.Format("Mon Jan _2 15:04 2006"), 
-					j.JobStatus.State + "/" + j.ClusterStatus.State, 
+				fmt.Printf(f,
+					j.ID,
+					j.Date.Format("Mon Jan _2 15:04 2006"),
+					j.JobStatus.State+"/"+j.ClusterStatus.State,
 					j.Name)
 			}
 		}

@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 )
@@ -11,9 +10,6 @@ var rootCmd = &cobra.Command{
 	Short: "rs is a simple cli for the rescale scaleX platform",
 	Long: `rs is a simple cli for the rescale scaleX platform made by js947. 
 See http://github.com/js947/rs`,
-	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("hi")
-	},
 }
 
 func Execute() error {
