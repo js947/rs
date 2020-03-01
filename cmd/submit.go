@@ -3,6 +3,7 @@ package cmd
 import (
 	"archive/zip"
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -121,4 +122,40 @@ func submit(cmd *cobra.Command, args []string) {
 	if err := ioutil.WriteFile("input.zip", buf.Bytes(), 0644); err != nil {
 		log.Fatal(err)
 	}
+
+	type AnalysisType struct {
+		Code string `json:"code"`
+		Version string `json:"version"`
+	}
+	type HardwareType struct {
+		CoresPerSlot int `json:"coresPerSlot"`
+		Slots int `json:"slots"`
+		CoreType string `json:"coreType"`
+	}
+	type InputFile struct {
+		ID string `json:"id"`
+	}
+	type JobAnalysis struct {
+		UseMPI bool `json:"useMPI"`
+		Command string `json:"command"`
+		Analysis AnalysisType `json:"analysis"`
+		Hardware HardwareType `json:"hardware"`
+		InputFiles []InputFile`json:"inputFiles"`
+	}
+	type JobSubmission struct {
+		Name string `json:"name"`
+		Analyses []JobAnalysis`json:"jobanalyses"`
+	}
+	ja := make([]JobAnalysis, len(j.Analysis))
+	for i, a := range j.Analysis {
+		at := AnalysisType{Code: a.Software, Version: a.Version}
+		ht := HardwareType{CoresPerSlot: j.NumCores, Slots: 1, CoreType: j.Core}
+		in := make([]InputFile, 1)
+		in[0] = InputFile{ID: "xxxx"}
+		ja[i] = JobAnalysis{UseMPI: true, Command: a.Command, Analysis: at, Hardware: ht, InputFiles: in}
+	}
+	js := JobSubmission{ Name: j.Name, Analyses: ja }
+
+	jb, err := json.MarshalIndent(js, "", "  ")
+	fmt.Printf("%s\n", jb)
 }
