@@ -30,6 +30,12 @@ func jobs(cmd *cobra.Command) error {
 		Name string `json:"name"`
 		ID string `json:"id"`
 		Owner string `json:"owner"`
+		JobStatus struct {
+			State string `json:"content"`
+		} `json:"jobStatus"`
+		ClusterStatus struct {
+			State string `json:"content"`
+		} `json:"clusterStatusDisplay"`
 	}
 	var jobs []Job
 
@@ -57,17 +63,17 @@ func jobs(cmd *cobra.Command) error {
 	}
 
 	if all_jobs {
-		f := "%6s\t%24s\t%s\n"
-		fmt.Printf(f, "id", "owner", "name")
+		f := "%6s\t%24s\t%24s\t%s\n"
+		fmt.Printf(f, "id", "owner", "status", "name")
 		for _, j := range jobs {
-			fmt.Printf(f, j.ID, j.Owner, j.Name)
+			fmt.Printf(f, j.ID, j.Owner, j.JobStatus.State + "/" + j.ClusterStatus.State, j.Name)
 		}
 	} else {
-		f := "%6s\t%s\n"
-		fmt.Printf(f, "id", "name")
+		f := "%6s\t%24s\t%s\n"
+		fmt.Printf(f, "id", "status", "name")
 		for _, j := range jobs {
 			if j.Owner == viper.GetString("username") {
-				fmt.Printf(f, j.ID, j.Name)
+				fmt.Printf(f, j.ID, j.JobStatus.State + "/" + j.ClusterStatus.State, j.Name)
 			}
 		}
 	}
