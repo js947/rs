@@ -47,8 +47,8 @@ func submit(cmd *cobra.Command, args []string) {
 	}
 	job.AddConfigPath(path)
 
-	job.SetDefault("core", "onyx")
-	job.SetDefault("numcores", 2)
+	job.SetDefault("core", "hpc-3")
+	job.SetDefault("numcores", 1)
 
 	err = job.ReadInConfig()
 	if err != nil {
@@ -129,7 +129,7 @@ func submit(cmd *cobra.Command, args []string) {
 		ID string `json:"id"`
 	}
 	type JobAnalysis struct {
-		UseMPI     bool         `json:"useMPI"`
+		UseMPI     bool         `json:"useMpi"`
 		Command    string       `json:"command"`
 		Analysis   AnalysisType `json:"analysis"`
 		Hardware   HardwareType `json:"hardware"`
@@ -152,8 +152,14 @@ func submit(cmd *cobra.Command, args []string) {
 	jb, err := json.MarshalIndent(js, "", "  ")
 	fmt.Printf("%s\n", jb)
 
-	_, err = api.PostJSON("https://platform.rescale.com/api/v2/jobs/", jb)
+	jbuf, err := api.PostJSON("https://platform.rescale.com/api/v2/jobs/", bytes.NewBuffer(jb))
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	var ji struct {
+		ID string `json:"id"`
+	}
+	json.Unmarshal(jbuf, &ji)
+	fmt.Printf("created job %s\n", ji.ID)
 }
