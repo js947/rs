@@ -27,8 +27,8 @@ func Post(addr string, data io.Reader) ([]byte, error) {
 	if err != nil {
 		return nil, err
 	}
-	if r.StatusCode != 201 {
-		return nil, fmt.Errorf("upload error %s: %s", r.Status, body)
+	if r.StatusCode < 200 || r.StatusCode >= 400 {
+		return nil, fmt.Errorf("POST %s %s: %s", addr, r.Status, body)
 	}
 
 	return body, nil
