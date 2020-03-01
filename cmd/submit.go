@@ -30,6 +30,8 @@ func init() {
 	job.BindPFlag("core", cmd.Flags().Lookup("core"))
 	cmd.Flags().IntP("numcores", "n", 0, "number of cores")
 	job.BindPFlag("numcores", cmd.Flags().Lookup("numcores"))
+	cmd.Flags().String("name", "", "job name")
+	job.BindPFlag("name", cmd.Flags().Lookup("name"))
 
 	rootCmd.AddCommand(cmd)
 }
