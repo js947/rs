@@ -42,8 +42,7 @@ type FileInfo struct {
 func UploadFile(name string, data *bytes.Buffer) (*FileInfo, error) {
 	var b bytes.Buffer
 	w := multipart.NewWriter(&b)
-
-	fw, err := w.CreateFormField("file")
+	fw, err := w.CreateFormFile("file", name)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +50,6 @@ func UploadFile(name string, data *bytes.Buffer) (*FileInfo, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	w.Close()
 
 	client := http.Client{}
