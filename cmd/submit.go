@@ -1,10 +1,15 @@
 package cmd
 
 import (
+	"archive/zip"
+	"bytes"
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"io/ioutil"
 	"log"
+	"os"
+	"path/filepath"
 )
 
 var job = viper.New()
@@ -69,5 +74,49 @@ func submit(cmd *cobra.Command, args []string) {
 		fmt.Printf("analysis step %d: software %s\n", i, a.Software)
 		fmt.Printf("analysis step %d: version  %s\n", i, a.Version)
 		fmt.Printf("analysis step %d: command  %s\n", i, a.Command)
+	}
+
+	buf := new(bytes.Buffer)
+	z := zip.NewWriter(buf)
+
+	if err := filepath.Walk(path, func(p string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			rp, err := filepath.Rel(path, p)
+			if err != nil {
+				return err
+			}
+			f, err := z.Create(rp)
+			if err != nil {
+				return err
+			}
+			dat, err := ioutil.ReadFile(p)
+			if err != nil {
+				return err
+			}
+			nb, err := f.Write([]byte(dat))
+			if err != nil {
+				return err
+			}
+			fmt.Printf("collected input file: %q (%d bytes)\n", rp, nb)
+		}
+		return nil
+	}); err != nil {
+		log.Fatal(err)
+	}
+	if err := z.Close(); err != nil {
+		log.Fatal(err)
+	}
+
+	f, err := os.Create("archive.zip")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer f.Close()
+
+	if err := ioutil.WriteFile("input.zip", buf.Bytes(), 0644); err != nil {
+		log.Fatal(err)
 	}
 }
