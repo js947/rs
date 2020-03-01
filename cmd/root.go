@@ -23,8 +23,8 @@ func Execute() error {
 	viper.BindPFlag("api", rootCmd.PersistentFlags().Lookup("api"))
 
 	viper.SetDefault("api", "https://platform.rescale.com/api/")
-	viper.SetConfigName(".rescale")
-	viper.AddConfigPath("$HOME")
+	viper.SetConfigName("config")
+	viper.AddConfigPath("$HOME/.rescale")
 	viper.AddConfigPath(".")
 	viper.SetEnvPrefix("RESCALE")
 	viper.AutomaticEnv()
