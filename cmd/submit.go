@@ -162,5 +162,11 @@ func submit(cmd *cobra.Command, args []string) {
 		ID string `json:"id"`
 	}
 	json.Unmarshal(jbuf, &ji)
-	fmt.Printf("created job %s\n", ji.ID)
+	fmt.Printf("created job %s - %s\n", ji.ID, j.Name)
+
+	_, err = api.Post(fmt.Sprintf("v2/jobs/%s/submit/", ji.ID), bytes.NewBuffer([]byte("")))
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("submitted job %s - %s\n", ji.ID, j.Name)
 }
