@@ -7,7 +7,7 @@ import (
 
 func init() {
 	rename := &cobra.Command{
-		Use: "rename <jobid> <new name>",
+		Use:   "rename <jobid> <new name>",
 		Short: "Rename job",
 		Run: func(cmd *cobra.Command, args []string) {
 			err := job_rename(cmd, args[0], args[1])
