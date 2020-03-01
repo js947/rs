@@ -5,6 +5,3 @@ analysis:
 - software: openfoam
   version: 7-intelmpi
   command: ./Allrun
-- software: paraview
-  version: latest
-  command: pvplot plot.py
