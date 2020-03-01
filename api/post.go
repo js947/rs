@@ -10,7 +10,7 @@ import (
 
 func Post(addr string, data io.Reader) ([]byte, error) {
     client := http.Client{}
-	req, err := http.NewRequest("POST", addr, data)
+	req, err := http.NewRequest("POST", viper.GetString("api") + addr, data)
 	if err != nil {
 		return nil, err
 	}

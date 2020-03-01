@@ -152,7 +152,7 @@ func submit(cmd *cobra.Command, args []string) {
 	js := Job{Name: j.Name, Analyses: ja}
 
 	jb, err := json.MarshalIndent(js, "", "  ")
-	jbuf, err := api.PostJSON("https://platform.rescale.com/api/v2/jobs/", bytes.NewBuffer(jb))
+	jbuf, err := api.Post("v2/jobs/", bytes.NewBuffer(jb))
 	if err != nil {
 		log.Fatal(err)
 	}

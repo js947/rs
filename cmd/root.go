@@ -19,7 +19,10 @@ See http://github.com/js947/rs`,
 func Execute() error {
 	rootCmd.PersistentFlags().StringP("token", "t", "", "Rescale API token")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
+	rootCmd.PersistentFlags().String("api", "", "API address")
+	viper.BindPFlag("api", rootCmd.PersistentFlags().Lookup("api"))
 
+	viper.SetDefault("api", "https://platform.rescale.com/api/")
 	viper.SetConfigName(".rescale")
 	viper.AddConfigPath("$HOME")
 	viper.AddConfigPath(".")
