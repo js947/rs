@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/js947/rs/api"
 	"github.com/spf13/cobra"
+	"log"
 )
 
 func init() {
@@ -32,7 +33,11 @@ func versions(app string) {
 	}
 
 	addr := fmt.Sprintf("https://platform.rescale.com/api/v2/analyses/%s/", app)
-	json.Unmarshal(api.Get(addr), &ad)
+	body, err := api.Get(addr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	json.Unmarshal(body, &ad)
 
 	for _, v := range ad.Versions {
 		fmt.Printf("%20s\t%s\n", v.Version, v.Code)

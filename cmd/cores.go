@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/js947/rs/api"
 	"github.com/spf13/cobra"
+	"log"
 )
 
 func init() {
@@ -39,7 +40,11 @@ func get_coretypes() []Core {
 			Next    string
 			Results []Core
 		}
-		json.Unmarshal(api.Get(addr), &capi)
+		data, err := api.Get(addr)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.Unmarshal(data, &capi)
 
 		addr = capi.Next
 		cores = append(cores, capi.Results...)
@@ -69,7 +74,11 @@ func cores_for_application(app string, version string) {
 	}
 
 	addr := fmt.Sprintf("https://platform.rescale.com/api/v2/analyses/%s/", app)
-	json.Unmarshal(api.Get(addr), &ad)
+	body, err := api.Get(addr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	json.Unmarshal(body, &ad)
 
 	for _, v := range ad.Versions {
 		if v.Code == version {

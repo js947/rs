@@ -40,7 +40,11 @@ func analyses(cmd *cobra.Command, args []string) {
 			Next    string
 			Results []Analysis
 		}
-		json.Unmarshal(api.Get(addr), &capi)
+		data, err := api.Get(addr)
+		if err != nil {
+			log.Fatal(err)
+		}
+		json.Unmarshal(data, &capi)
 
 		addr = capi.Next
 		analyses = append(analyses, capi.Results...)

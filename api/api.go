@@ -6,33 +6,32 @@ import (
 	"github.com/spf13/viper"
 	"io"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"encoding/json"
 	"mime/multipart"
 )
 
-func Get(addr string) []byte {
+func Get(addr string) ([]byte, error) {
 	client := http.Client{}
 
 	req, err := http.NewRequest("GET", addr, nil)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Token %s", viper.GetString("token")))
 
 	r, err := client.Do(req)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	defer r.Body.Close()
 
 	body, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
-	return body
+	return body, nil
 }
 
 type FileInfo struct {
