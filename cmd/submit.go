@@ -33,18 +33,6 @@ func init() {
 	rootCmd.AddCommand(cmd)
 }
 
-type Job struct {
-	Name     string
-	Core     string
-	NumCores int
-	Analysis []AnalysisStep
-}
-type AnalysisStep struct {
-	Software string
-	Version  string
-	Command  string
-}
-
 func submit(cmd *cobra.Command, args []string) {
 	name, err := cmd.Flags().GetString("config")
 	if err != nil {
@@ -66,7 +54,16 @@ func submit(cmd *cobra.Command, args []string) {
 		log.Fatal(err)
 	}
 
-	var j Job
+	var j struct {
+		Name     string
+		Core     string
+		NumCores int
+		Analysis []struct {
+			Software string
+			Version  string
+			Command  string
+		}
+	}
 	job.Unmarshal(&j)
 
 	fmt.Printf("name      %s\n", j.Name)
@@ -103,7 +100,7 @@ func submit(cmd *cobra.Command, args []string) {
 			if err != nil {
 				return err
 			}
-			fmt.Printf("collected input file: %q (%d bytes)\n", rp, nb)
+			log.Printf("collected input file: %q (%d bytes)\n", rp, nb)
 		}
 		return nil
 	}); err != nil {
@@ -142,7 +139,7 @@ func submit(cmd *cobra.Command, args []string) {
 		Hardware HardwareType `json:"hardware"`
 		InputFiles []InputFile`json:"inputFiles"`
 	}
-	type JobSubmission struct {
+	type Job struct {
 		Name string `json:"name"`
 		Analyses []JobAnalysis`json:"jobanalyses"`
 	}
@@ -154,7 +151,7 @@ func submit(cmd *cobra.Command, args []string) {
 		in[0] = InputFile{ID: "xxxx"}
 		ja[i] = JobAnalysis{UseMPI: true, Command: a.Command, Analysis: at, Hardware: ht, InputFiles: in}
 	}
-	js := JobSubmission{ Name: j.Name, Analyses: ja }
+	js := Job{ Name: j.Name, Analyses: ja }
 
 	jb, err := json.MarshalIndent(js, "", "  ")
 	fmt.Printf("%s\n", jb)
