@@ -49,6 +49,7 @@ func submit(cmd *cobra.Command, args []string) {
 	}
 	job.AddConfigPath(path)
 
+	job.SetDefault("name", "Untitled Job")
 	job.SetDefault("core", "hpc-3")
 	job.SetDefault("numcores", 1)
 
