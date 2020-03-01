@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/js947/rs/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"io/ioutil"
@@ -36,13 +37,13 @@ func init() {
 func submit(cmd *cobra.Command, args []string) {
 	name, err := cmd.Flags().GetString("config")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	job.SetConfigName(name)
 
 	path, err := cmd.Flags().GetString("path")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	job.AddConfigPath(path)
 
@@ -51,7 +52,7 @@ func submit(cmd *cobra.Command, args []string) {
 
 	err = job.ReadInConfig()
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	var j struct {
@@ -104,20 +105,15 @@ func submit(cmd *cobra.Command, args []string) {
 		}
 		return nil
 	}); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	if err := z.Close(); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
-	f, err := os.Create("archive.zip")
+	fileinfo, err := api.UploadFile(j.Name + ".zip", buf)
 	if err != nil {
-		log.Fatal(err)
-	}
-	defer f.Close()
-
-	if err := ioutil.WriteFile("input.zip", buf.Bytes(), 0644); err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	type AnalysisType struct {
@@ -148,7 +144,7 @@ func submit(cmd *cobra.Command, args []string) {
 		at := AnalysisType{Code: a.Software, Version: a.Version}
 		ht := HardwareType{CoresPerSlot: j.NumCores, Slots: 1, CoreType: j.Core}
 		in := make([]InputFile, 1)
-		in[0] = InputFile{ID: "xxxx"}
+		in[0] = InputFile{ID: fileinfo.ID}
 		ja[i] = JobAnalysis{UseMPI: true, Command: a.Command, Analysis: at, Hardware: ht, InputFiles: in}
 	}
 	js := Job{ Name: j.Name, Analyses: ja }

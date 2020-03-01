@@ -4,8 +4,6 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"log"
-	"os"
 )
 
 var rootCmd = &cobra.Command{
@@ -18,7 +16,7 @@ See http://github.com/js947/rs`,
 	},
 }
 
-func Execute() {
+func Execute() error {
 	rootCmd.PersistentFlags().StringP("token", "t", "", "Rescale API token")
 	viper.BindPFlag("token", rootCmd.PersistentFlags().Lookup("token"))
 
@@ -30,12 +28,9 @@ func Execute() {
 
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			log.Fatal(err)
+			return err
 		}
 	}
 
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	return rootCmd.Execute()
 }
