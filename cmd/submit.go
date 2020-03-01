@@ -33,6 +33,7 @@ func init() {
 }
 
 type Job struct {
+	Name     string
 	Core     string
 	NumCores int
 	Analysis []AnalysisStep
@@ -67,6 +68,7 @@ func submit(cmd *cobra.Command, args []string) {
 	var j Job
 	job.Unmarshal(&j)
 
+	fmt.Printf("name      %s\n", j.Name)
 	fmt.Printf("core      %s\n", j.Core)
 	fmt.Printf("num cores %d\n", j.NumCores)
 

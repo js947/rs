@@ -1,3 +1,4 @@
+name: OpenFOAM MotorBike
 core: onyx
 numcores: 8
 analysis:
