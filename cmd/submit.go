@@ -111,33 +111,33 @@ func submit(cmd *cobra.Command, args []string) {
 		panic(err)
 	}
 
-	fileinfo, err := api.UploadFile(j.Name + ".zip", buf)
+	fileinfo, err := api.UploadFile(j.Name+".zip", buf)
 	if err != nil {
 		panic(err)
 	}
 
 	type AnalysisType struct {
-		Code string `json:"code"`
+		Code    string `json:"code"`
 		Version string `json:"version"`
 	}
 	type HardwareType struct {
-		CoresPerSlot int `json:"coresPerSlot"`
-		Slots int `json:"slots"`
-		CoreType string `json:"coreType"`
+		CoresPerSlot int    `json:"coresPerSlot"`
+		Slots        int    `json:"slots"`
+		CoreType     string `json:"coreType"`
 	}
 	type InputFile struct {
 		ID string `json:"id"`
 	}
 	type JobAnalysis struct {
-		UseMPI bool `json:"useMPI"`
-		Command string `json:"command"`
-		Analysis AnalysisType `json:"analysis"`
-		Hardware HardwareType `json:"hardware"`
-		InputFiles []InputFile`json:"inputFiles"`
+		UseMPI     bool         `json:"useMPI"`
+		Command    string       `json:"command"`
+		Analysis   AnalysisType `json:"analysis"`
+		Hardware   HardwareType `json:"hardware"`
+		InputFiles []InputFile  `json:"inputFiles"`
 	}
 	type Job struct {
-		Name string `json:"name"`
-		Analyses []JobAnalysis`json:"jobanalyses"`
+		Name     string        `json:"name"`
+		Analyses []JobAnalysis `json:"jobanalyses"`
 	}
 	ja := make([]JobAnalysis, len(j.Analysis))
 	for i, a := range j.Analysis {
@@ -147,7 +147,7 @@ func submit(cmd *cobra.Command, args []string) {
 		in[0] = InputFile{ID: fileinfo.ID}
 		ja[i] = JobAnalysis{UseMPI: true, Command: a.Command, Analysis: at, Hardware: ht, InputFiles: in}
 	}
-	js := Job{ Name: j.Name, Analyses: ja }
+	js := Job{Name: j.Name, Analyses: ja}
 
 	jb, err := json.MarshalIndent(js, "", "  ")
 	fmt.Printf("%s\n", jb)

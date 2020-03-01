@@ -2,13 +2,13 @@ package api
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"github.com/spf13/viper"
 	"io"
 	"io/ioutil"
-	"net/http"
-	"encoding/json"
 	"mime/multipart"
+	"net/http"
 )
 
 func Get(addr string) ([]byte, error) {
@@ -36,8 +36,9 @@ func Get(addr string) ([]byte, error) {
 
 type FileInfo struct {
 	Name string `json:"name"`
-	ID string `json:"id"`
+	ID   string `json:"id"`
 }
+
 func UploadFile(name string, data *bytes.Buffer) (*FileInfo, error) {
 	var b bytes.Buffer
 	w := multipart.NewWriter(&b)
