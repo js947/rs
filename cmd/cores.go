@@ -11,7 +11,7 @@ func init() {
 	cmd := &cobra.Command{
 		Use:   "cores [application version]",
 		Short: "List core types",
-		Run:   func(cmd *cobra.Command, args []string) {
+		Run: func(cmd *cobra.Command, args []string) {
 			if len(args) == 0 {
 				allcores()
 			} else {
@@ -28,6 +28,7 @@ type Core struct {
 	Processor string `json:"processorInfo"`
 	Price     float32
 }
+
 func get_coretypes() []Core {
 	var cores []Core
 
@@ -56,15 +57,15 @@ func allcores() {
 
 func cores_for_application(app string, version string) {
 	type ApplicationVersion struct {
-		Id string
+		Id               string
 		AllowedCoreTypes []string `json:"allowedCoreTypes"`
-		Version string
-		Code string `json:"versionCode"`
+		Version          string
+		Code             string `json:"versionCode"`
 	}
 	var ad struct {
-		Code string
+		Code        string
 		Description string
-		Versions []ApplicationVersion
+		Versions    []ApplicationVersion
 	}
 
 	addr := fmt.Sprintf("https://platform.rescale.com/api/v2/analyses/%s/", app)

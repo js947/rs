@@ -3,14 +3,14 @@ package cmd
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"github.com/blevesearch/bleve"
 	"github.com/js947/rs/api"
+	wordwrap "github.com/mitchellh/go-wordwrap"
 	"github.com/spf13/cobra"
+	"io/ioutil"
+	"log"
 	"os"
 	"strings"
-	wordwrap "github.com/mitchellh/go-wordwrap"
 )
 
 func init() {
@@ -79,7 +79,7 @@ func analyses(cmd *cobra.Command, args []string) {
 		fmt.Printf("%d matches\n", len(searchResults.Hits))
 		for i, a := range searchResults.Hits {
 			var (
-				name string
+				name        string
 				description string
 			)
 			for _, b := range analyses {
@@ -88,13 +88,13 @@ func analyses(cmd *cobra.Command, args []string) {
 					description = b.Description
 				}
 			}
-			fmt.Printf("%3d %s\n", i, a.ID) 
-			fmt.Printf("%s\n%s\n\n", name, wordwrap.WrapString(description, 80)) 
+			fmt.Printf("%3d %s\n", i, a.ID)
+			fmt.Printf("%s\n%s\n\n", name, wordwrap.WrapString(description, 80))
 		}
 	} else {
 		for i, a := range analyses {
-			fmt.Printf("%3d %s\n", i, a.Code) 
-			fmt.Printf("%s\n%s\n\n", a.Name, wordwrap.WrapString(a.Description, 80)) 
+			fmt.Printf("%3d %s\n", i, a.Code)
+			fmt.Printf("%s\n%s\n\n", a.Name, wordwrap.WrapString(a.Description, 80))
 		}
 	}
 }

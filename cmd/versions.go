@@ -11,8 +11,8 @@ func init() {
 	cmd := &cobra.Command{
 		Use:   "versions application_code",
 		Short: "List versions of a given application",
-		Run:   func(cmd *cobra.Command, args []string) {
-            versions(args[0])
+		Run: func(cmd *cobra.Command, args []string) {
+			versions(args[0])
 		},
 	}
 	rootCmd.AddCommand(cmd)
@@ -20,15 +20,15 @@ func init() {
 
 func versions(app string) {
 	type ApplicationVersion struct {
-		Id string
+		Id               string
 		AllowedCoreTypes []string `json:"allowedCoreTypes"`
-		Version string
-		Code string `json:"versionCode"`
+		Version          string
+		Code             string `json:"versionCode"`
 	}
 	var ad struct {
-		Code string
+		Code        string
 		Description string
-		Versions []ApplicationVersion
+		Versions    []ApplicationVersion
 	}
 
 	addr := fmt.Sprintf("https://platform.rescale.com/api/v2/analyses/%s/", app)
