@@ -2,9 +2,10 @@ package api
 
 import (
 	"fmt"
-	"github.com/spf13/viper"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/spf13/viper"
 )
 
 func Get(addr string) ([]byte, error) {
