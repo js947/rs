@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func PostJSON(addr string, data io.Reader) ([]byte, error) {
+func Post(addr string, data io.Reader) ([]byte, error) {
     client := http.Client{}
 	req, err := http.NewRequest("POST", addr, data)
 	if err != nil {
@@ -16,7 +16,6 @@ func PostJSON(addr string, data io.Reader) ([]byte, error) {
 	}
 	req.Header.Add("Authorization", fmt.Sprintf("Token %s", viper.GetString("token")))
 	req.Header.Set("Content-Type", "application/json;charset=utf-8")
-	fmt.Printf("req %+v\n", *req)
 
     r, err := client.Do(req)
     if err != nil {
@@ -29,12 +28,6 @@ func PostJSON(addr string, data io.Reader) ([]byte, error) {
 		return nil, err
 	}
 	if r.StatusCode != 201 {
-		/*
-		var errorresponse struct {
-			Detail string `json:"detail"`
-		}
-		json.Unmarshal(body, &errorresponse)
-		*/
 		return nil, fmt.Errorf("upload error %s: %s", r.Status, body)
 	}
 
