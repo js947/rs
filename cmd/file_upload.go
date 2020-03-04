@@ -26,32 +26,43 @@ func init() {
 	fileCmd.AddCommand(upload)
 }
 
-func do_upload(name string, path string) error {
-	fmt.Printf("upload %s from %s\n", name, path)
+func do_upload(name string, path string) (*api.FileInfo, error) {
 	dat, err := ioutil.ReadFile(path)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = api.UploadFile(name, bytes.NewBuffer(dat))
+	file, err := api.UploadFile(name, bytes.NewBuffer(dat))
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	fmt.Printf("upload %s %s from %s\n", file.ID, name, path)
+	return file, nil
 }
-func do_upload_dir(path string) error {
-	return filepath.Walk(path, func (path string, info os.FileInfo, err error) error {
+func do_upload_dir(path string) ([]*api.FileInfo, error) {
+	fmt.Printf("uploading dir %s\n", path)
+	var files []*api.FileInfo
+	err := filepath.Walk(path, func (p string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}
 		if info.IsDir() {
 			return nil
 		}
-		rpath, err := filepath.Rel(path, path)
+		rp, err := filepath.Rel(path, p)
 		if err != nil {
 			return err
 		}
-		return do_upload(rpath, path)
+		file, err := do_upload(rp, p)
+		if err != nil {
+			return err
+		}
+		files = append(files, file)
+		return nil
 	})
+	if err != nil {
+		return nil, err
+	}
+	return files, nil
 }
 
 func file_upload(paths []string) error {
@@ -62,9 +73,9 @@ func file_upload(paths []string) error {
 		}
 
 		if file.IsDir() {
-			err = do_upload_dir(path)
+			_, err = do_upload_dir(path)
 		} else {
-			err = do_upload(path, path)
+			_, err = do_upload(path, path)
 		}
 		if err != nil {
 			return err
