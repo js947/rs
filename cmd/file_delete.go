@@ -7,8 +7,9 @@ import (
 
 func init() {
 	rename := &cobra.Command{
-		Use:   "delete <jobid> <new name>",
-		Short: "Delete file",
+		Use:   "delete <fileid> [<fileid>...]",
+		Short: "Delete file(s)",
+		Args: cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			err := file_delete(cmd, args[0], args[1])
 			if err != nil {
