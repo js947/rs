@@ -80,44 +80,7 @@ func submit(cmd *cobra.Command, args []string) {
 		fmt.Printf("analysis step %d: command  %s\n", i, a.Command)
 	}
 
-	buf := new(bytes.Buffer)
-	z := zip.NewWriter(buf)
-
-	if err := filepath.Walk(path, func(p string, info os.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if !info.IsDir() {
-			rp, err := filepath.Rel(path, p)
-			if err != nil {
-				return err
-			}
-			f, err := z.Create(rp)
-			if err != nil {
-				return err
-			}
-			dat, err := ioutil.ReadFile(p)
-			if err != nil {
-				return err
-			}
-			nb, err := f.Write([]byte(dat))
-			if err != nil {
-				return err
-			}
-			log.Printf("collected input file: %q (%d bytes)\n", rp, nb)
-		}
-		return nil
-	}); err != nil {
-		panic(err)
-	}
-	if err := z.Close(); err != nil {
-		panic(err)
-	}
-
-	fileinfo, err := api.UploadFile(j.Name+".zip", buf)
-	if err != nil {
-		panic(err)
-	}
+	do_upload_dir(path)
 
 	type AnalysisType struct {
 		Code    string `json:"code"`
