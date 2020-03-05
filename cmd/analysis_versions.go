@@ -16,7 +16,7 @@ func init() {
 			versions(args[0])
 		},
 	}
-	rootCmd.AddCommand(cmd)
+	analysisCmd.AddCommand(cmd)
 }
 
 func versions(app string) {
