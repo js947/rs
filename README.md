@@ -117,3 +117,24 @@ $ rs cores openfoam 7-intelmpi
 ```
 
 ### Job submission
+
+```
+$ rs submit
+[... files uploaded ...]
+job create <jobid>
+job submit <jobid>
+```
+
+### Job files
+
+```
+$ rs files list --jobid=<jobid>
+[... list output files for job ...]
+```
+
+## Further Information
+
+The full capabilities of each command is described in the wiki pages:
+
+- Files `$ rs file [upload,list,delete]` [](https://github.com/js947/rs.wiki/file)
+- Jobs `$ rs job [list,rename,delete]` [](https://github.com/js947/rs.wiki/job)
