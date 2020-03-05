@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/js947/rs/api"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 func init() {
@@ -45,4 +44,5 @@ func versions(app string) error {
 	for _, v := range ad.Versions {
 		fmt.Printf("%20s\t%s\n", v.Version, v.Code)
 	}
+	return nil
 }

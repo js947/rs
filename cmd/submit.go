@@ -33,6 +33,9 @@ func init() {
 	cmd.Flags().String("name", "", "job name")
 	job.BindPFlag("name", cmd.Flags().Lookup("name"))
 
+	cmd.Flags().BoolP("watch", "w", false, "watch log file")
+	cmd.Flags().BoolP("sync", "s", false, "sync output files")
+
 	rootCmd.AddCommand(cmd)
 }
 
@@ -140,5 +143,21 @@ func submit(cmd *cobra.Command) error {
 		return err
 	}
 	fmt.Printf("submit job %s - %s\n", ji.ID, j.Name)
+
+	watch, err := cmd.Flags().GetBool("watch")
+	if err != nil {
+		return err
+	}
+	if watch {
+		return fmt.Errorf("watching job not implemented")
+	}
+
+	sync, err := cmd.Flags().GetBool("sync")
+	if err != nil {
+		return err
+	}
+	if sync {
+		return fmt.Errorf("syncing job output not implemented")
+	}
 	return nil
 }
