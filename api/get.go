@@ -8,10 +8,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-func Get(addr string) ([]byte, error) {
+func do(addr string, verb string) ([]byte, error) {
 	client := http.Client{}
 
-	req, err := http.NewRequest("GET", addr, nil)
+	req, err := http.NewRequest(verb, addr, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -29,4 +29,11 @@ func Get(addr string) ([]byte, error) {
 	}
 
 	return body, nil
+}
+
+func Get(addr string) ([]byte, error) {
+	return do(addr, "GET")
+}
+func Delete(addr string) ([]byte, error) {
+	return do(addr, "DELETE")
 }

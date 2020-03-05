@@ -45,6 +45,7 @@ type File struct {
 	Path string `json:"path"`
 	ID string `json:"id"`
 	MD5 string `json:"md5"`
+	IsDeleted bool `json:"isDelelted"`
 }
 func file_list(cmd *cobra.Command) error {
 	var files []File
@@ -71,6 +72,9 @@ func file_list(cmd *cobra.Command) error {
 	f := "%12s\t%12s\t%24s\t%s\n"
 	fmt.Printf(f, "ID", "type", "name", "name")
 	for _, file := range files {
+		if file.IsDeleted {
+			continue
+		}
 		fmt.Printf(f, file.ID, file.TypeStr(), file.Name, file.Path)
 	}
 	fmt.Printf("%d files\n", count)
