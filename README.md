@@ -2,7 +2,36 @@
 
 This tool implements many of the features you might need in order to setup and run jobs on the Rescale ScaleX platform.
 
-## Analysis types
+# Walkthough
+
+The typical workflow to design and submit a job will require the following
+steps
+
+1. Choose the analysis software required. 
+
+  Rescale supports over 200 software packages and we can use this tool to
+  search on the command line for a particular package, and also list the
+  available versions of each package.
+
+2. Choose the hardware (or 'core') type to run on.
+
+  Rescale includes a wide range of hardware types and here we have
+  functionality to list all the various core types, and filter down to those that support our chosen analysis software.
+
+3. Submit a job.
+
+  From local input files, `rs` can upload the input files gather all the required options and submit the job.
+
+4. Monitoring
+
+  Once submitted we can open a job's page on the rescale platform to view its
+  output. We can also stream the logs directly to the local termial.
+
+5. Collect outputs
+
+  When the job completes we may wish to download the output files for futher analysis.
+
+### Analysis types
 
 To identify the software required to run an analysis we can use the `analysis` command. This can be used either to list all analysis types
 
@@ -45,7 +74,7 @@ transfer, to acoustics, solid mechanics and electromagnetics.</p>
 [... other custom versions of openfoam ...]
 ```
 
-## Analysis versions
+### Analysis versions
 
 To query the available versions of an analysis, we can use the `versions` command with the analysis *code*. The *code* is the simple ID - i.e. openfoam rather than openFOAM, openfoam_plus rather than OpenFOAM+. 
 
@@ -66,7 +95,7 @@ $ rs versions openfoam
 
 This command returns the description along with the version code.
 
-## Core types
+### Core types
 
 To identify what kind of core (hardware) we can run on, we can use the `cores` command.
 
@@ -86,3 +115,5 @@ It is necessary to pick a core type that has support for the specific applicatio
 $ rs cores openfoam 7-intelmpi
 [... lots of core types ...]
 ```
+
+### Job submission
