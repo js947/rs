@@ -6,7 +6,10 @@ This tool implements many of the features you might need in order to setup and r
 
 To run the tool we need:
 
-- The rs binary. Build with `go install`. 
+- The rs binary
+
+Build from source with `go install`. Or install from github with `go get -u github.com/js947/rs`.
+
 - A rescale API token, either in `~/.rescale/config.yml`
 
 ```
