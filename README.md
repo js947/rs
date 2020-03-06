@@ -9,17 +9,17 @@ We present two example use cases both of which demonstrate a simple, single-step
 - [Airfoil2D](https://github.com/js947/rs/tree/master/examples/airfoil2D)
 - [MotorBike](https://github.com/js947/rs/tree/master/examples/motorbike)
 
-However, accessing the API makes many more things possbile; for example: 
+However, accessing the API makes many more things possible; for example: 
 
 - compiling a custom app and then using the compiled binary in other jobs
-- multi-stage jobs; for example running a simluation and then post-processing the data at scale
+- multi-stage jobs; for example running a simulation and then post-processing the data at scale
 
 ## Walkthough
 
 The typical workflow to design and submit a job will require the following
 steps
 
-1. Choose the analysis software required. 
+1. Choose the analysis software required.
 
   Rescale supports over 200 software packages and we can use this tool to
   search on the command line for a particular package, and also list the
@@ -37,11 +37,11 @@ steps
 4. Monitoring
 
   Once submitted we can open a job's page on the rescale platform to view its
-  output. We can also stream the logs directly to the local termial.
+  output. We can also stream the logs directly to the local terminal.
 
 5. Collect outputs
 
-  When the job completes we may wish to download the output files for futher analysis.
+  When the job completes we may wish to download the output files for further analysis.
 
 ### Analysis types
 
@@ -85,7 +85,9 @@ transfer, to acoustics, solid mechanics and electromagnetics.</p>
 
 ### Analysis versions
 
-To query the available versions of an analysis, we can use the `versions` command with the analysis *code*. The *code* is the simple ID - i.e. openfoam rather than openFOAM, openfoam_plus rather than OpenFOAM+. 
+To query the available versions of an analysis, we can use the `versions`
+command with the analysis *code*. The *code* is the simple ID - i.e. openfoam
+rather than openFOAM, openfoam_plus rather than OpenFOAM+. 
 
 ```
 $ rs analysis versions openfoam
@@ -118,7 +120,9 @@ $ rs cores
 [... total 30+ different core types ...]
 ```
 
-It is necessary to pick a core type that has support for the specific application that you are trying to run, and you can filter with the application and version code to see the core types that support that application version
+It is necessary to pick a core type that has support for the specific
+application that you are trying to run, and you can filter with the application
+and version code to see the core types that support that application version
 
 ```
 $ rs cores openfoam 7-intelmpi
@@ -178,7 +182,7 @@ $ rs submit --core luna --numcores 24
 
 to choose a 24-core cascade lake architecture. This might allow fast
 comparison of different core types and core counts to determine the most
-effient configuration for a given simulation.
+efficient configuration for a given simulation.
 
 ### Opening a job
 
