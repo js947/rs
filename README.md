@@ -180,12 +180,58 @@ to choose a 24-core cascade lake architecture. This might allow fast
 comparison of different core types and core counts to determine the most
 effient configuration for a given simulation.
 
+### Opening a job
+
+To investigate the progress of a job by opening it in the rescale web
+interface we can use `rs job open`
+
+```
+$ rs job open <jobid>
+```
+
+with the jobid returned from the submission. This will open the web page in
+the operating system's default browser.
+
 ### Job files
+
+To investigate the output files from a given job we can use `rs job files` to
+list output files, and `rs file cat` to quickly read them. For example
 
 ```
 $ rs job files <jobid>
-[... list output files for job ...]
+          ID            type                        name        name
+      DJdFem          output          process_output.log        user/user_yXwteb/output/job_Ptczhb/run1/process_output.log
+      ikLbhm          output                      U.orig        user/user_yXwteb/output/job_Ptczhb/run1/0/U.orig
+      vvLbhm          output                  fixedInlet        user/user_yXwteb/output/job_Ptczhb/run1/0/include/fixedInlet
+[... many other output files for job ...]
 ```
+
+to get the list of output files, and
+
+```
+$ rs file cat <fileid>
+[2020-03-06T12:05:46Z]: Launching ./Allrun, Working dir: /enc/uprod_Ptczhb/work/shared.  Process output follows:
+[2020-03-06T12:05:47Z]: Running surfaceFeatures on /enc/uprod_Ptczhb/work/shared
+[2020-03-06T12:05:59Z]: Running blockMesh on /enc/uprod_Ptczhb/work/shared
+[2020-03-06T12:06:00Z]: Running decomposePar on /enc/uprod_Ptczhb/work/shared
+[2020-03-06T12:06:01Z]: Running snappyHexMesh in parallel on /enc/uprod_Ptczhb/work/shared using 6 processes
+[2020-03-06T12:07:18Z]: Running patchSummary in parallel on /enc/uprod_Ptczhb/work/shared using 6 processes
+[2020-03-06T12:07:19Z]: Running potentialFoam in parallel on /enc/uprod_Ptczhb/work/shared using 6 processes
+[2020-03-06T12:07:20Z]: Running simpleFoam in parallel on /enc/uprod_Ptczhb/work/shared using 6 processes
+[2020-03-06T12:10:09Z]: Running reconstructParMesh on /enc/uprod_Ptczhb/work/shared
+[2020-03-06T12:10:12Z]: Running reconstructPar on /enc/uprod_Ptczhb/work/shared
+[2020-03-06T12:10:13Z]: Exited with code 0
+```
+
+to read a particular output file (here the log of an openfoam job going through its phases).
+
+To download a larger file (perhaps a vtk output file)
+
+```
+$ rs file download <fileid>
+```
+
+will save the output file in the current directory.
 
 ## Further Information
 
