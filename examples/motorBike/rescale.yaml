@@ -5,3 +5,4 @@ analysis:
 - software: openfoam
   version: 7-intelmpi
   command: ./Allrun
+
