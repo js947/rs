@@ -25,7 +25,7 @@ func init() {
 func job_file_list(cmd *cobra.Command, jobid string) error {
 	var files []File
 	var count int
-	addr := fmt.Sprintf("https://platform.rescale.com/api/v2/jobs/%s/files/", jobid)
+	addr := fmt.Sprintf("https://platform.rescale.com/api/v2/jobs/%s/files/?page_size=200", jobid)
 	for addr != "" {
 		var capi struct {
 			Count   int
