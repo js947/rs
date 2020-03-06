@@ -6,7 +6,7 @@ import (
 
 var jobCmd = &cobra.Command{
 	Use:   "job",
-	Short: "job [list,open,rename,delete]",
+	Short: "job [list,open,files,rename,delete]",
 }
 
 func init() {
