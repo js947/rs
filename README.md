@@ -237,5 +237,5 @@ will save the output file in the current directory.
 
 The full capabilities of each command is described in the wiki pages:
 
-- Files `$ rs file [upload,list,delete]` [](https://github.com/js947/rs.wiki/file)
-- Jobs `$ rs job [list,rename,delete]` [](https://github.com/js947/rs.wiki/job)
+- [Files](https://github.com/js947/rs.wiki/file) `$ rs file [upload,list,delete]`
+- [Jobs](https://github.com/js947/rs.wiki/job) `$ rs job [list,rename,delete]`
