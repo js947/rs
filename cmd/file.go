@@ -6,7 +6,7 @@ import (
 
 var fileCmd = &cobra.Command{
 	Use:   "file",
-	Short: "file [upload,list,cat,delete]",
+	Short: "file [upload,list,cat,download,delete]",
 }
 
 func init() {
