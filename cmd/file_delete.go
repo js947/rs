@@ -24,7 +24,7 @@ func init() {
 func file_delete(fileids []string) error {
 	for _, fileid := range fileids {
 		addr := fmt.Sprintf("https://platform.rescale.com/api/v2/files/%s/", fileid)
-		_, err :=  api.Delete(addr)
+		_, err := api.Delete(addr)
 		if err != nil {
 			return err
 		}

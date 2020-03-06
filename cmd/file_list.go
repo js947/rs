@@ -36,17 +36,18 @@ func init() {
 }
 
 type File struct {
-	TypeID int `json:"typeId"`
-	Name string `json:"name"`
-	Date time.Time `json:"dateUploaded"`
-	RelativePath string `json:"relativePath"`
-	URL string `json:"downloadUrl"`
-	Size int `json:"decryptedSize"`
-	Path string `json:"path"`
-	ID string `json:"id"`
-	MD5 string `json:"md5"`
-	IsDeleted bool `json:"isDelelted"`
+	TypeID       int       `json:"typeId"`
+	Name         string    `json:"name"`
+	Date         time.Time `json:"dateUploaded"`
+	RelativePath string    `json:"relativePath"`
+	URL          string    `json:"downloadUrl"`
+	Size         int       `json:"decryptedSize"`
+	Path         string    `json:"path"`
+	ID           string    `json:"id"`
+	MD5          string    `json:"md5"`
+	IsDeleted    bool      `json:"isDelelted"`
 }
+
 func file_list(cmd *cobra.Command) error {
 	var files []File
 	var count int
@@ -83,7 +84,11 @@ func file_list(cmd *cobra.Command) error {
 }
 
 func (f *File) TypeStr() string {
-	if f.TypeID == 1 { return "input" }
-	if f.TypeID == 5 { return "output" }
+	if f.TypeID == 1 {
+		return "input"
+	}
+	if f.TypeID == 5 {
+		return "output"
+	}
 	return fmt.Sprintf("%d", f.TypeID)
 }

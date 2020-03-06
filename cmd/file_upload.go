@@ -41,7 +41,7 @@ func do_upload(name string, path string) (*api.FileInfo, error) {
 func do_upload_dir(path string) ([]*api.FileInfo, error) {
 	fmt.Printf("uploading dir %s\n", path)
 	var files []*api.FileInfo
-	err := filepath.Walk(path, func (p string, info os.FileInfo, err error) error {
+	err := filepath.Walk(path, func(p string, info os.FileInfo, err error) error {
 		if err != nil {
 			return err
 		}

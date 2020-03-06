@@ -19,7 +19,7 @@ func init() {
 	cmd := &cobra.Command{
 		Use:   "submit",
 		Short: "Submit job",
-		Run:   func(cmd *cobra.Command, args []string) {
+		Run: func(cmd *cobra.Command, args []string) {
 			err := submit(cmd)
 			if err != nil {
 				panic(err)
