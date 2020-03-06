@@ -127,6 +127,11 @@ $ rs cores openfoam 7-intelmpi
 
 ### Job submission
 
+To submit a job we can `rs submit`. This will:
+- pack up the jobs input files into a zip file and upload it;
+- read the `rescale.yaml` file to determine the analysis software, core type and other settings; and
+- submit the job.
+
 ```
 $ rs submit
 [... files uploaded ...]
@@ -134,10 +139,51 @@ job create <jobid>
 job submit <jobid>
 ```
 
+By default this will look for the job files in the current directory, and
+read `rescale.yaml` from that directory. To submit a job in a different
+directory we can use the `--path` option:
+
+```
+$ rs submit --path=mysimulations/motorBike
+[... upload input from mysimulations/motorBike ...]
+```
+
+and to use a different `rescale.yaml` input file we can use the `--config` option:
+
+```
+$ rs submit --config=config2.yaml
+[... look for input in the config2.yaml file ...]
+```
+
+The core type, number of cores, required software and other settings are
+specified in the config file. For example
+
+```
+name: OpenFOAM MotorBike
+core: hpc-3
+numcores: 8
+analysis:
+- software: openfoam
+  version: 7-intelmpi
+  command: ./Allrun
+```
+
+where the core type and analysis software use the code rather than
+human-readable name (i.e. `hpc-3` rather than `Onyx`). Some of these settings
+can be overridden on the command line e.g.
+
+```
+$ rs submit --core luna --numcores 24
+```
+
+to choose a 24-core cascade lake architecture. This might allow fast
+comparison of different core types and core counts to determine the most
+effient configuration for a given simulation.
+
 ### Job files
 
 ```
-$ rs files list --jobid=<jobid>
+$ rs job files <jobid>
 [... list output files for job ...]
 ```
 
