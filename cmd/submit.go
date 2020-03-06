@@ -1,12 +1,16 @@
 package cmd
 
 import (
+	"archive/zip"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"github.com/js947/rs/api"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 )
 
 var job = viper.New()
@@ -15,7 +19,7 @@ func init() {
 	cmd := &cobra.Command{
 		Use:   "submit",
 		Short: "Submit job",
-		Run: func(cmd *cobra.Command, args []string) {
+		Run:   func(cmd *cobra.Command, args []string) {
 			err := submit(cmd)
 			if err != nil {
 				panic(err)
@@ -83,7 +87,41 @@ func submit(cmd *cobra.Command) error {
 		fmt.Printf("analysis step %d: command  %s\n", i, a.Command)
 	}
 
-	files, err := do_upload_dir(path)
+	buf := new(bytes.Buffer)
+	z := zip.NewWriter(buf)
+
+	if err := filepath.Walk(path, func(p string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() {
+			rp, err := filepath.Rel(path, p)
+			if err != nil {
+				return err
+			}
+			f, err := z.Create(rp)
+			if err != nil {
+				return err
+			}
+			dat, err := ioutil.ReadFile(p)
+			if err != nil {
+				return err
+			}
+			nb, err := f.Write([]byte(dat))
+			if err != nil {
+				return err
+			}
+			fmt.Printf("collected input file: %q (%d bytes)\n", rp, nb)
+		}
+		return nil
+	}); err != nil {
+		return err
+	}
+	if err := z.Close(); err != nil {
+		return err
+	}
+
+	fileinfo, err := api.UploadFile(j.Name+".zip", buf)
 	if err != nil {
 		return err
 	}
@@ -115,18 +153,13 @@ func submit(cmd *cobra.Command) error {
 	for i, a := range j.Analysis {
 		at := AnalysisType{Code: a.Software, Version: a.Version}
 		ht := HardwareType{CoresPerSlot: j.NumCores, Slots: 1, CoreType: j.Core}
-		in := make([]InputFile, len(files))
-		for j, f := range files {
-			in[j] = InputFile{ID: f.ID}
-		}
+		in := make([]InputFile, 1)
+		in[0] = InputFile{ID: fileinfo.ID}
 		ja[i] = JobAnalysis{UseMPI: true, Command: a.Command, Analysis: at, Hardware: ht, InputFiles: in}
 	}
 	js := Job{Name: j.Name, Analyses: ja}
 
 	jb, err := json.MarshalIndent(js, "", "  ")
-	if err != nil {
-		return err
-	}
 	jbuf, err := api.Post("v2/jobs/", bytes.NewBuffer(jb))
 	if err != nil {
 		return err
@@ -146,18 +179,18 @@ func submit(cmd *cobra.Command) error {
 
 	watch, err := cmd.Flags().GetBool("watch")
 	if err != nil {
-		return err
+			return err
 	}
 	if watch {
-		return fmt.Errorf("watching job not implemented")
+			return fmt.Errorf("watching job not implemented")
 	}
 
 	sync, err := cmd.Flags().GetBool("sync")
 	if err != nil {
-		return err
+			return err
 	}
 	if sync {
-		return fmt.Errorf("syncing job output not implemented")
+			return fmt.Errorf("syncing job output not implemented")
 	}
 	return nil
 }
