@@ -48,34 +48,31 @@ steps
 To identify the software required to run an analysis we can use the `analysis` command. This can be used either to list all analysis types
 
 ```
-$ rs analysis
+$ rs analyses
 [... all the 100s of packages supported by rescale ...]
 ```
 
 or to search for a particular piece of software
 
 ```
-$ rs analysis openfoam
-278 analyses indexed
+$ rs analyses openfoam
+281 analyses indexed
 5 matches
-  0             openfoam
-OpenFOAM
+          'openfoam' OpenFOAM
 <p><b>OpenFOAM</B> is the leading free, open source software for CFD, owned by
 the <B>OpenFOAM Foundation</b> and distributed exclusively under the General
 Public Licence (GPL). The GPL gives users the freedom to modify and redistribute
 the software and a guarantee of continued free use, within the terms of the
 licence.</p>
 
-  1          foam_extend
-foam-extend
+       'foam_extend' foam-extend
 <p>The <b>foam-extend</b> project is a fork of the OpenFOAM open source library
 for Computational Fluid Dynamics (CFD).<br><b>OpenFOAM</b> is a C++ toolbox for
 the development of customized numerical solvers, and pre-/post-processing
 utilities for the solution of continuum mechanics problems, including
 computational fluid dynamics (CFD).</p>
 
-  2        openfoam_plus
-OpenFOAM+
+     'openfoam_plus' OpenFOAM+
 <p><b>OpenFOAM</b> is the free, open source CFD software released and developed
 primarily by <b>OpenCFD</b> Ltd since 2004. It has a large user base across most
 areas of engineering and science, from both commercial and academic
@@ -91,7 +88,7 @@ transfer, to acoustics, solid mechanics and electromagnetics.</p>
 To query the available versions of an analysis, we can use the `versions` command with the analysis *code*. The *code* is the simple ID - i.e. openfoam rather than openFOAM, openfoam_plus rather than OpenFOAM+. 
 
 ```
-$ rs versions openfoam
+$ rs analysis versions openfoam
        7 (Intel MPI)    7-intelmpi
        6 (Intel MPI)    6-intelmpi
                  5.0    5.0
