@@ -2,6 +2,23 @@
 
 This tool implements many of the features you might need in order to setup and run jobs on the Rescale ScaleX platform.
 
+## Setup
+
+To run the tool we need:
+
+- The rs binary. Build with `go install`. 
+- A rescale API token, either in `~/.rescale/config.yml`
+
+```
+token: XXXXXXX
+```
+
+or in an enviornment variable
+
+```
+export RESCALE_TOKEN=XXXXXXX
+```
+
 ## Example use cases
 
 We present two example use cases both of which demonstrate a simple, single-step openfoam job
