@@ -88,7 +88,7 @@ func analysis_search(cmd *cobra.Command, args []string) {
 		}
 
 		fmt.Printf("%d matches\n", len(searchResults.Hits))
-		for i, a := range searchResults.Hits {
+		for _, a := range searchResults.Hits {
 			var (
 				name        string
 				description string
@@ -99,13 +99,13 @@ func analysis_search(cmd *cobra.Command, args []string) {
 					description = b.Description
 				}
 			}
-			fmt.Printf("%3d %s\n", i, a.ID)
-			fmt.Printf("%s\n%s\n\n", name, wordwrap.WrapString(description, 80))
+			fmt.Printf("%20s %s\n", "'" + a.ID + "'", name)
+			fmt.Printf("%s\n\n", wordwrap.WrapString(description, 80))
 		}
 	} else {
-		for i, a := range analyses {
-			fmt.Printf("%3d %s\n", i, a.Code)
-			fmt.Printf("%s\n%s\n\n", a.Name, wordwrap.WrapString(a.Description, 80))
+		for _, a := range analyses {
+			fmt.Printf("%20s%s\n", "'" + a.Code + "'", a.Name)
+			fmt.Printf("%s\n\n", wordwrap.WrapString(a.Description, 80))
 		}
 	}
 }
