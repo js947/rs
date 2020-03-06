@@ -179,18 +179,18 @@ func submit(cmd *cobra.Command) error {
 
 	watch, err := cmd.Flags().GetBool("watch")
 	if err != nil {
-			return err
+		return err
 	}
 	if watch {
-			return fmt.Errorf("watching job not implemented")
+		return fmt.Errorf("watching job not implemented")
 	}
 
 	sync, err := cmd.Flags().GetBool("sync")
 	if err != nil {
-			return err
+		return err
 	}
 	if sync {
-			return fmt.Errorf("syncing job output not implemented")
+		return fmt.Errorf("syncing job output not implemented")
 	}
 	return nil
 }
