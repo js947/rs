@@ -2,7 +2,19 @@
 
 This tool implements many of the features you might need in order to setup and run jobs on the Rescale ScaleX platform.
 
-# Walkthough
+## Example use cases
+
+We present two example use cases both of which demonstrate a simple, single-step openfoam job
+
+- [Airfoil2D](https://github.com/js947/rs/tree/master/examples/airfoil2D)
+- [MotorBike](https://github.com/js947/rs/tree/master/examples/motorbike)
+
+However, accessing the API makes many more things possbile; for example: 
+
+- compiling a custom app and then using the compiled binary in other jobs
+- multi-stage jobs; for example running a simluation and then post-processing the data at scale
+
+## Walkthough
 
 The typical workflow to design and submit a job will require the following
 steps
