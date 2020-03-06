@@ -2,23 +2,32 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/js947/rs/api"
 	"github.com/spf13/cobra"
 )
 
 func init() {
-	rename := &cobra.Command{
-		Use:   "delete <jobid> <new name>",
-		Short: "Delete file",
+	delete := &cobra.Command{
+		Use:   "delete <fileid> [<fileid>...]",
+		Short: "Delete file(s)",
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
-			err := file_delete(cmd, args[0], args[1])
+			err := file_delete(args)
 			if err != nil {
 				panic(err)
 			}
 		},
 	}
-	jobCmd.AddCommand(rename)
+	fileCmd.AddCommand(delete)
 }
 
-func file_delete(cmd *cobra.Command, jobid string, newname string) error {
-	return fmt.Errorf("file_rename not implemented")
+func file_delete(fileids []string) error {
+	for _, fileid := range fileids {
+		addr := fmt.Sprintf("https://platform.rescale.com/api/v2/files/%s/", fileid)
+		_, err :=  api.Delete(addr)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

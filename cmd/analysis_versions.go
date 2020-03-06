@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/js947/rs/api"
 	"github.com/spf13/cobra"
-	"log"
 )
 
 func init() {
@@ -13,13 +12,16 @@ func init() {
 		Use:   "versions application_code",
 		Short: "List versions of a given application",
 		Run: func(cmd *cobra.Command, args []string) {
-			versions(args[0])
+			err := versions(args[0])
+			if err != nil {
+				panic(err)
+			}
 		},
 	}
-	rootCmd.AddCommand(cmd)
+	analysisCmd.AddCommand(cmd)
 }
 
-func versions(app string) {
+func versions(app string) error {
 	type ApplicationVersion struct {
 		Id               string
 		AllowedCoreTypes []string `json:"allowedCoreTypes"`
@@ -35,11 +37,12 @@ func versions(app string) {
 	addr := fmt.Sprintf("https://platform.rescale.com/api/v2/analyses/%s/", app)
 	body, err := api.Get(addr)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	json.Unmarshal(body, &ad)
 
 	for _, v := range ad.Versions {
 		fmt.Printf("%20s\t%s\n", v.Version, v.Code)
 	}
+	return nil
 }

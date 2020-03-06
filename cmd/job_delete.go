@@ -7,8 +7,9 @@ import (
 
 func init() {
 	delete := &cobra.Command{
-		Use:   "delete <jobid>",
-		Short: "Rename job",
+		Use:   "delete <jobid> [<jobid>...]",
+		Short: "Delete job(s)",
+		Args:  cobra.MinimumNArgs(1),
 		Run: func(cmd *cobra.Command, args []string) {
 			err := job_delete(cmd, args[0])
 			if err != nil {

@@ -14,6 +14,7 @@ func init() {
 	jobs := &cobra.Command{
 		Use:   "jobs",
 		Short: "List jobs (shorthand for 'job list')",
+		Args:  cobra.NoArgs,
 		Run: func(cmd *cobra.Command, args []string) {
 			err := job_list(cmd)
 			if err != nil {
@@ -26,6 +27,7 @@ func init() {
 	list := &cobra.Command{
 		Use:   "list",
 		Short: "List jobs",
+		Args:  cobra.NoArgs,
 		Run: func(cmd *cobra.Command, args []string) {
 			err := job_list(cmd)
 			if err != nil {
